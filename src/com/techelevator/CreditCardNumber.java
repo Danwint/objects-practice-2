@@ -10,22 +10,15 @@ public class CreditCardNumber {
 	private String cardType;
 
 	private CreditCardNumber(String accountNumber) {
-		validAccountNumber = accountNumber;
-		char firstDigitAccNumber = accountNumber.charAt(0);
-		if (firstDigitAccNumber == '4') {
-			cardType = TYPE_VISA;
-		} else if (firstDigitAccNumber == '5') {
-			cardType = TYPE_MASTERCARD;
-		} else if (firstDigitAccNumber == '3') {
-			cardType = TYPE_AMEX;
-		} else if (firstDigitAccNumber == '6') {
-			cardType = TYPE_DISCOVER;
-		}
 		
+		cardType = accountNumber.substring(0, 2);
+		validAccountNumber = accountNumber.substring(2);
+
 	}
 	
 	public static CreditCardNumber valueOf(String accountNumber) {
-
+		
+		String ccType;
 		int accNumLength = accountNumber.length();
 		char firstDigitAccNumber = accountNumber.charAt(0);
 		char secondDigitAccNumber = accountNumber.charAt(1);
@@ -33,18 +26,18 @@ public class CreditCardNumber {
 		int valueOfFirstFourDigits = Integer.valueOf(accountNumber.substring(0, 4));
 		int valueOfFirstThreeDigits = Integer.valueOf(accountNumber.substring(0, 3));
 		if (firstDigitAccNumber == '4' && (accNumLength == 16 || accNumLength == 13)) {
-			
+			ccType = TYPE_VISA;
 		} else if (firstDigitAccNumber == '5' && secondDigitAccNumber > '0' && secondDigitAccNumber < '6' && accNumLength == 16) {
-			
+			ccType = TYPE_MASTERCARD;
 		} else if (firstDigitAccNumber == '3' && (secondDigitAccNumber == '4' || secondDigitAccNumber == '7') && accNumLength == 15) {
-			
+			ccType = TYPE_AMEX;
 		} else if ((valueOfFirstSixDigits >= 622126 && valueOfFirstSixDigits <= 622925) || (valueOfFirstFourDigits == 6011) || 
 				(valueOfFirstThreeDigits >= 644 && valueOfFirstThreeDigits <= 659) && accNumLength == 16) {
-			
+			ccType = TYPE_DISCOVER;
 		} else {
 			return null;
 		}
-		return new CreditCardNumber(accountNumber);
+		return new CreditCardNumber(ccType + accountNumber);
 	}
 
 	/**
